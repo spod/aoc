@@ -1,6 +1,5 @@
 #! /usr/bin/env python
 
-from itertools import combinations
 test_input = [199, 200, 208, 210, 200, 207, 240, 269, 260, 263]
 input =  list((int(l.strip()) for l in open("./inputs/day01").readlines()))
 
