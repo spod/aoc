@@ -1,7 +1,8 @@
 #! /usr/bin/env python
 
 test_input = [199, 200, 208, 210, 200, 207, 240, 269, 260, 263]
-input =  list((int(l.strip()) for l in open("./inputs/day01").readlines()))
+input = list((int(l.strip()) for l in open("./inputs/day01").readlines()))
+
 
 def partA(input):
     prev_depth = -1
@@ -12,8 +13,10 @@ def partA(input):
         prev_depth = sweep
     return depth_increases
 
+
 print("test partA:", partA(test_input))
 print("partA:", partA(input))
+
 
 def partB(input):
     # 3 measurement sliding window
@@ -29,6 +32,7 @@ def partB(input):
             depth_increases += 1
         prev_sum = sweep_sum
     return depth_increases
+
 
 print("test partB:", partB(test_input))
 print("partB:", partB(input))
