@@ -34,7 +34,26 @@ print("partA:", partA(input))
 
 
 def partB(input):
-    return -42
+    horizontal = 0
+    depth = 0
+    aim = 0
+    for move in input:
+        (direction, unit) = move.split(' ')
+        unit = int(unit)
+        # print('direction', direction, 'unit', unit)
+        if direction == 'forward':
+            horizontal += unit
+            depth += aim * unit
+        elif direction == 'down':
+            #depth += unit
+            aim += unit
+        elif direction == 'up':
+            #depth -= unit
+            aim -= unit
+        else:
+            print("invalid move", move)
+        # print(move, ' => ', 'horizontal', horizontal, 'depth', depth, 'aim', aim)
+    return horizontal * depth
 
 
 print("test partB:", partB(test_input))
