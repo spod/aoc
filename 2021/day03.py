@@ -52,8 +52,8 @@ def partA(input):
     return power
 
 
-# print("test partA:", partA(test_input))
-# print("partA:", partA(input))
+print("test partA:", partA(test_input))
+print("partA:", partA(input))
 
 
 def input_to_matrix(input):
@@ -88,8 +88,12 @@ def filter_matrix(matrix, col, want):
 
 
 def partB(input):
-    dat = input_to_matrix(input)
 
+    # this should use a segment tree or some similar data structure
+    # rather than just looping over input again and again and cloning data
+    # or maybe use a pandas dataframe or something?
+
+    dat = input_to_matrix(input)
     oxygen_dat = dat
     for b in range(len(dat[0])):
         c = col(oxygen_dat, b)
@@ -101,7 +105,6 @@ def partB(input):
         if len(oxygen_dat) == 1:
             break
     oxygen = binlist2int(oxygen_dat[0])
-    print(oxygen)
 
     co2_dat = dat
     for b in range(len(dat[0])):
