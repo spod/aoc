@@ -96,29 +96,41 @@ def part1(input):
         for b in range(len(boards)):
             scores[b] = update_score_board(boards[b], scores[b], draw)
             if bingo_board(scores[b]):
-                print("Winner!")
-                print("Last number drawn: ", draw)
-                print("All draw numbers:", draw_numbers)
-                print()
-                print("Winning board #:", b)
-                pb(boards[b])
-                pb(scores[b])
-                print("score -", calculate_board_points(boards[b], scores[b], draw))
-
-                print("All boards: ...")
-                for brd in range(len(boards)):
-                    print(f"board: {brd}")
-                    pb(boards[brd])
-                    pb(scores[brd])
-                    print(f"bingo: {bingo_board(scores[brd])}")
-                    print()
+                # print("Winner!")
+                # print("Last number drawn: ", draw)
+                # print("All draw numbers:", draw_numbers)
+                # print()
+                # print("Winning board #:", b)
+                # pb(boards[b])
+                # pb(scores[b])
+                # print("score -", calculate_board_points(boards[b], scores[b], draw))
                 return calculate_board_points(boards[b], scores[b], draw)
     return None
 
 
 def part2(input):
-    return None
+    draw_numbers, boards = read_bingo_boards(input)
+    scores = [score_card() for _ in range(len(boards))]
+    board_won = [False for _ in range(len(boards))]
 
+    last_winning_score = 0
+
+    for draw in draw_numbers:
+        for b in range(len(boards)):
+            if not board_won[b]:
+                scores[b] = update_score_board(boards[b], scores[b], draw)
+                if bingo_board(scores[b]):
+                    board_won[b] = True
+                    board_score = calculate_board_points(boards[b], scores[b], draw)
+                    # print("Winner!")
+                    # print("Last number drawn: ", draw)
+                    # print()
+                    # print("Winning board #:", b)
+                    # print("score -", board_score)
+                    if board_score != 0:
+                        last_winning_score = board_score
+
+    return last_winning_score
 # test
 # print(bingo_board(score_card()))
 # print(bingo_board([[False, False, False, False, False],
@@ -156,7 +168,6 @@ day = os.path.basename(__file__).split('.')[0][-2:]
 input = list((l.strip() for l in open(f"./inputs/day{day}").readlines()))
 print(f"Day {day}")
 print("test part 1:", part1(test_input))
-print()
 print("part 1:", part1(input))
-# print("test part 2:", part2(test_input))
-# print("part 2:", part2(input))
+print("test part 2:", part2(test_input))
+print("part 2:", part2(input))
