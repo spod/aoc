@@ -68,7 +68,7 @@ def update_score_board(b, s, n):
                 return s
     return s
 
-def calculate_board_points(b, s):
+def calculate_board_points(b, s, d):
     sums = 0
     for r in range(5):
         for c in range(5):
@@ -76,7 +76,7 @@ def calculate_board_points(b, s):
                 sums += b[r][c]
             #print(f"r: {r}, c: {c}, b[r][c]: {b[r][c]}, s[r][c]: {s[r][c]}, sums: {sums}")
 
-    return sums * 24
+    return sums * d
 
 
 def pb(b):
@@ -103,7 +103,7 @@ def part1(input):
                 print("Winning board #:", b)
                 pb(boards[b])
                 pb(scores[b])
-                print("score -", calculate_board_points(boards[b], scores[b]))
+                print("score -", calculate_board_points(boards[b], scores[b], draw))
 
                 print("All boards: ...")
                 for brd in range(len(boards)):
@@ -112,7 +112,7 @@ def part1(input):
                     pb(scores[brd])
                     print(f"bingo: {bingo_board(scores[brd])}")
                     print()
-                return calculate_board_points(boards[b], scores[b])
+                return calculate_board_points(boards[b], scores[b], draw)
     return None
 
 
