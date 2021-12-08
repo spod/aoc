@@ -1,5 +1,10 @@
 #! /usr/bin/env python
 
+from collections import defaultdict
+
+single_test_input = [
+    "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf"
+]
 test_input = [
     "be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe",
     "edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec | fcgedb cgb dgebacf gc",
@@ -28,7 +33,7 @@ digits_to_binary = {
     9: 0b1111011
 }
 
-digits_to_char = {
+digits_to_chrs = {
     0: 'abcefg',
     1: 'cf',
     2: 'acdeg',
@@ -72,7 +77,7 @@ def part1(data):
     return uniques
 
 
-def part2(input):
+def part2(data):
     # Need to figure out decryption key...
     #
     # For (input | output):
@@ -91,6 +96,63 @@ def part2(input):
     #   5, 'abdfg'  => 'cdfbe'
     #   6, 'abdefg' => 'cdfgeb'
     #   9, 'abcdfg' => 'cefabd'
+    #
+    # Candidates based on known:
+    #  a - [d]
+    #  b - [e,f]
+    #  c - [a,b]
+    #  d - [e,f]
+    #  e - [c,g]
+    #  f - [a,b]
+    #  g - [c,g]
+    #
+    # Need to keep reducing/guessing further to get key:
+    #   'abcdefg' -> 'deafgbc'
+
+    for line in data:
+        # possible candidates that character maps to see example above
+        candidates = defaultdict(set)
+
+        numbersToSeq = {}
+        (input, output) = parse_line(line)
+        all_seqs = input.copy()
+        all_seqs.extend(output)
+
+        # first figure out candidates based on known lengths
+        # starting from shortest to longest sequence
+        all_seqs.sort(key=len)
+
+        for seq in all_seqs:
+            if len(seq) == digits_to_len[1]:
+                numbersToSeq[1] = seq
+                for c in digits_to_chrs[1]:
+                    if len(candidates[c]) == 0:
+                        print(f"1) adding {seq} as candidate for {c}")
+                        candidates[c] |= set(list(seq))
+            elif len(seq) == digits_to_len[4]:
+                numbersToSeq[4] = seq
+                for c in digits_to_chrs[4]:
+                    if len(candidates[c]) == 0:
+                        print(f"4) adding {seq} as candidate for {c}")
+                        candidates[c] |= set(list(seq))
+            elif len(seq) == digits_to_len[7]:
+                numbersToSeq[7] = seq
+                for c in digits_to_chrs[7]:
+                    if len(candidates[c]) == 0:
+                        print(f"7) adding {seq} as candidate for {c}")
+                        candidates[c] |= set(list(seq))
+            elif len(seq) == digits_to_len[8]:
+                numbersToSeq[8] = seq
+                for c in digits_to_chrs[8]:
+                    if len(candidates[c]) == 0:
+                        print(f"8) adding {seq} as candidate for {c}")
+                        candidates[c] |= set(list(seq))
+
+        # now figure out the rest!
+        # - reduce
+        # - guess if can't reduce further?
+        print(numbersToSeq)
+        print(candidates)
 
     return None
 
@@ -100,6 +162,7 @@ day = os.path.basename(__file__).split('.')[0][-2:]
 input = list((l.strip() for l in open(f"./inputs/day{day}").readlines()))
 print(f"Day {day}")
 # print("test part 1:", part1(test_input))
-print("part 1:", part1(input))
-print("test part 2:", part2(test_input))
+# print("part 1:", part1(input))
+print("test part 2:", part2(single_test_input))
+#print("test part 2:", part2(test_input))
 # print("part 2:", part2(input))
