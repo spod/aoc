@@ -109,6 +109,13 @@ def part2(data):
     # Need to keep reducing/guessing further to get key:
     #   'abcdefg' -> 'deafgbc'
 
+    known_lengths = [
+        digits_to_len[1],
+        digits_to_len[4],
+        digits_to_len[7],
+        digits_to_len[8],
+    ]
+
     for line in data:
         # possible candidates that character maps to see example above
         candidates = defaultdict(set)
@@ -118,36 +125,17 @@ def part2(data):
         all_seqs = input.copy()
         all_seqs.extend(output)
 
-        # first figure out candidates based on known lengths
+        # first figure out initial candidates based on known lengths
         # starting from shortest to longest sequence
         all_seqs.sort(key=len)
-
         for seq in all_seqs:
-            if len(seq) == digits_to_len[1]:
-                numbersToSeq[1] = seq
-                for c in digits_to_chrs[1]:
+            if len(seq) in known_lengths:
+                n = [1, 4, 7, 8][known_lengths.index(len(seq))]
+                numbersToSeq[n] = seq
+                for c in digits_to_chrs[n]:
                     if len(candidates[c]) == 0:
-                        print(f"1) adding {seq} as candidate for {c}")
+                        print(f"{n}) adding {seq} as candidate for {c}")
                         candidates[c] |= set(list(seq))
-            elif len(seq) == digits_to_len[4]:
-                numbersToSeq[4] = seq
-                for c in digits_to_chrs[4]:
-                    if len(candidates[c]) == 0:
-                        print(f"4) adding {seq} as candidate for {c}")
-                        candidates[c] |= set(list(seq))
-            elif len(seq) == digits_to_len[7]:
-                numbersToSeq[7] = seq
-                for c in digits_to_chrs[7]:
-                    if len(candidates[c]) == 0:
-                        print(f"7) adding {seq} as candidate for {c}")
-                        candidates[c] |= set(list(seq))
-            elif len(seq) == digits_to_len[8]:
-                numbersToSeq[8] = seq
-                for c in digits_to_chrs[8]:
-                    if len(candidates[c]) == 0:
-                        print(f"8) adding {seq} as candidate for {c}")
-                        candidates[c] |= set(list(seq))
-
         # now figure out the rest!
         # - reduce
         # - guess if can't reduce further?
