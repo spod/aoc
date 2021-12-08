@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+import os.path
 from collections import defaultdict
 
 single_test_input = [
@@ -49,7 +50,7 @@ digits_to_chrs = {
 digits_to_len = {
     0: 6,
     1: 2,
-    2: 5, 
+    2: 5,
     3: 5,
     4: 4,
     5: 5,
@@ -59,9 +60,11 @@ digits_to_len = {
     9: 6
 }
 
+
 def parse_line(line):
     parts = line.split(' | ')
     return (parts[0].split(' '), parts[1].split(' '))
+
 
 def part1(data):
     uniques = 0
@@ -120,7 +123,7 @@ def part2(data):
         # possible candidates that character maps to see example above
         candidates = defaultdict(set)
 
-        numbersToSeq = {}
+        num_to_seq = {}
         (input, output) = parse_line(line)
         all_seqs = input.copy()
         all_seqs.extend(output)
@@ -131,7 +134,7 @@ def part2(data):
         for seq in all_seqs:
             if len(seq) in known_lengths:
                 n = [1, 4, 7, 8][known_lengths.index(len(seq))]
-                numbersToSeq[n] = seq
+                num_to_seq[n] = seq
                 for c in digits_to_chrs[n]:
                     if len(candidates[c]) == 0:
                         print(f"{n}) adding {seq} as candidate for {c}")
@@ -139,13 +142,14 @@ def part2(data):
         # now figure out the rest!
         # - reduce
         # - guess if can't reduce further?
-        print(numbersToSeq)
+        print(num_to_seq)
         print(candidates)
+        to_solve = set(list(range(0, 9+1))) - set(num_to_seq.keys())
+        print("To solve:", to_solve)
 
     return None
 
 
-import os.path
 day = os.path.basename(__file__).split('.')[0][-2:]
 input = list((l.strip() for l in open(f"./inputs/day{day}").readlines()))
 print(f"Day {day}")
