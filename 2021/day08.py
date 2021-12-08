@@ -141,6 +141,14 @@ def part2(data):
                         candidates[c] |= set(list(seq))
         # now figure out the rest!
         # - reduce
+        #   - if candidate set is a superset of smaller sets for other candidates
+        #     then we can remove the smaller set from this candidate set ...
+        #        eg. 'a': {'b', 'a', 'd'}
+        #            'c': {'b', 'a'}
+        #            'f': {'b', 'a'}
+        #         so given {'b','a'} is 'covered' for both 'c' & 'f' we know
+        #            'a': {'d'}
+        # - once we have reduced, can we match any further sequences to a number?
         # - guess if can't reduce further?
         print(num_to_seq)
         print(candidates)
