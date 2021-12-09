@@ -8,6 +8,7 @@ test_input = [
     "9899965678"
 ]
 
+
 def read_points_grid(input):
     g = []
     for line in input:
@@ -15,6 +16,7 @@ def read_points_grid(input):
     # for r in g:
     #     print(r)
     return g
+
 
 def adjacent_values(grid, r, c):
     adj = []
@@ -32,6 +34,7 @@ def adjacent_values(grid, r, c):
         adj.append(grid[r][c+1])
     return adj
 
+
 def adjacent_points_threshold(grid, r, c, t):
     # given starting point (r,c) in grid
     # return points adjacent to it which have values less than
@@ -39,17 +42,18 @@ def adjacent_points_threshold(grid, r, c, t):
     adj_points = []
     # up
     if r >= 1 and grid[r-1][c] < t:
-        adj_points.append((r-1,c))
+        adj_points.append((r-1, c))
     # down
     if r < len(grid) - 1 and grid[r+1][c] < t:
-        adj_points.append((r+1,c))
+        adj_points.append((r+1, c))
     # left
     if c >= 1 and grid[r][c-1] < t:
-        adj_points.append((r,c-1))
+        adj_points.append((r, c-1))
     # right
     if c < len(grid[0]) - 1 and grid[r][c+1] < t:
-        adj_points.append((r,c+1))
+        adj_points.append((r, c+1))
     return adj_points
+
 
 def part1(input):
     low_points = []
@@ -83,6 +87,7 @@ def basin(g, r, c, basin_pts=set()):
             basin_pts |= basin(g, rp, cp, basin_pts)
         return basin_pts
 
+
 def part2(input):
     low_points = []
     g = read_points_grid(input)
@@ -90,17 +95,16 @@ def part2(input):
     for r in range(len(g)):
         for c in range(len(g[0])):
             if g[r][c] < min(adjacent_values(g, r, c)):
-                low_points.append((r,c))
+                low_points.append((r, c))
 
     basin_sizes = []
-    for (r,c) in low_points:
-        b = basin(g,r,c,set())
+    for (r, c) in low_points:
+        b = basin(g, r, c, set())
         # print(f"({r},{c}) - basin size: {len(b)}, basin: {b}")
         basin_sizes.append(len(b))
     basin_sizes = sorted(basin_sizes, reverse=True)
     top3 = [d for d in basin_sizes[:3]]
     return top3[0] * top3[1] * top3[2]
-
 
 import os.path
 day = os.path.basename(__file__).split('.')[0][-2:]
