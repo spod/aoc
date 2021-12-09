@@ -83,11 +83,12 @@ def basin(g, r, c, basin_pts=set()):
         basin_pts |= additional
         for (rp, cp) in additional:
             basin_pts |= basin(g, rp, cp, basin_pts)
-            return basin_pts
+        return basin_pts
 
 def part2(input):
     low_points = []
     g = read_points_grid(input)
+
     for r in range(len(g)):
         for c in range(len(g[0])):
             if g[r][c] < min(adjacent_values(g, r, c)):
@@ -95,7 +96,7 @@ def part2(input):
 
     basin_sizes = []
     for (r,c) in low_points:
-        b = basin(g,r,c)
+        b = basin(g,r,c,set())
         print(f"({r},{c}) - basin size: {len(b)}, basin: {b}")
         basin_sizes.append(len(b))
     basin_sizes = sorted(basin_sizes, reverse=True)
