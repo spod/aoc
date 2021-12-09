@@ -63,7 +63,6 @@ def part1(input):
 
 
 def basin(g, r, c, basin_pts=set()):
-    #print(f"basin(g, {r}, {c}, {basin_pts})")
     # given co-ordinate, find all neighbouring points until
     # you hit 9s (boundary)
     #
@@ -76,7 +75,6 @@ def basin(g, r, c, basin_pts=set()):
     #
     adjacent = set(adjacent_points_threshold(g, r, c, 9))
     additional = adjacent - basin_pts
-    #print(f"r: {r}, {c}, adjacent: {adjacent}, additional: {additional}, basin_pts: {basin_pts}")
     if len(additional) == 0:
         return basin_pts
     else:
@@ -97,7 +95,7 @@ def part2(input):
     basin_sizes = []
     for (r,c) in low_points:
         b = basin(g,r,c,set())
-        print(f"({r},{c}) - basin size: {len(b)}, basin: {b}")
+        # print(f"({r},{c}) - basin size: {len(b)}, basin: {b}")
         basin_sizes.append(len(b))
     basin_sizes = sorted(basin_sizes, reverse=True)
     top3 = [d for d in basin_sizes[:3]]
@@ -111,4 +109,4 @@ print(f"Day {day}")
 print("test part 1:", part1(test_input))
 print("part 1:", part1(input))
 print("test part 2:", part2(test_input))
-# print("part 2:", part2(input))
+print("part 2:", part2(input))
