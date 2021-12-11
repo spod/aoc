@@ -52,6 +52,7 @@ def step_grid(g):
     
     # track which octopus flashed
     flashed = set()
+    neighbors_flashed = set()
     f = [ [ False for _ in range(len(g))] for _ in range(len(g))]
     for r in range(len(g)):
         for c in range(len(g)):
@@ -63,31 +64,35 @@ def step_grid(g):
     # now do any follow up flashes based on neighbors incremented
     # until we stop flashing additional cells
 
-    print("step ... increment only")
-    print(f"flashed: {len(flashed)}, {flashed}")
-    pg(g)
+    # print("step ... increment only")
+    # print(f"flashed: {len(flashed)}, {flashed}")
+    # pg(g)
 
     extra_flashed = -1
     while extra_flashed != 0:
         extra_flashed = 0
         for (r, c) in list(flashed):
-            to_bump = neighbors(r, c, len(g[0]) - 1)
-            for (rr, cc) in to_bump:
-                if (rr, cc) not in flashed:
-                    g[rr][cc] += 1
+            if (r, c) not in neighbors_flashed:
+                to_bump = neighbors(r, c, len(g[0]) - 1)
+                for (rr, cc) in to_bump:
+                    if (rr, cc) not in flashed:
+                        g[rr][cc] += 1
+                neighbors_flashed.add((r,c))
         for r in range(len(g)):
             for c in range(len(g)):
-                if g[r][c] == 10:
+                if g[r][c] >= 10:
                     g[r][c] = 0
                     if not f[r][c]:
                         f[r][c] = True
                         flashed.add((r,c))
                         extra_flashed += 1
 
-    print("step ... extra flashes")
-    print(f"flashed: {len(flashed)}, {flashed}")
-    pg(g)
-    print("total flashed this step:", len(flashed))
+    # print("step ... extra flashes")
+    # print(f"flashed: {len(flashed)}, {flashed}")
+    # pg(g)
+    # print("total flashed this step:", len(flashed))
+
+    pgf(g, flashed)
 
     return g, len(flashed)
 
@@ -95,6 +100,17 @@ def pg(g):
     for r in g:
         print(" ".join([str(c) for c in r]))
 
+def pgf(g, f):
+    print()
+    for r in range(len(g)):
+        to_print = []
+        for c in range(len(g)):
+            if (r,c) in f:
+                to_print.append(f"\u001b[1m{g[r][c]}\u001b[0m")
+            else:
+                to_print.append(f"{g[r][c]}")
+        print(" ".join(to_print))
+            
 tg = [
     "11111",
     "19991",
@@ -106,14 +122,22 @@ g = read_octopus_grid(tg)
 print("test grid:")
 pg(g)
 g, f = step_grid(g)
+print()
+print("flashed:", f)
+print()
+g, f = step_grid(g)
+print()
+pg(g)
+print("flashed:", f)
+print()
 
 def part1(input):
-    steps = 2
+    steps = 100
     flashes = 0
     g = read_octopus_grid(input)
     pg(g)
     for s in range(steps):
-        print(f"step {s}")
+        # print(f"step {s}")
         g, f = step_grid(g)
         flashes += f
 
@@ -128,7 +152,7 @@ import os.path
 day = os.path.basename(__file__).split('.')[0][-2:]
 input = list((l.strip() for l in open(f"./inputs/day{day}").readlines()))
 print(f"Day {day}")
-# print("test part 1:", part1(test_input))
-# print("part 1:", part1(input))
+print("test part 1:", part1(test_input))
+print("part 1:", part1(input))
 # print("test part 2:", part2(test_input))
 # print("part 2:", part2(input))
