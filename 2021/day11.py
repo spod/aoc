@@ -64,10 +64,6 @@ def step_grid(g):
     # now do any follow up flashes based on neighbors incremented
     # until we stop flashing additional cells
 
-    # print("step ... increment only")
-    # print(f"flashed: {len(flashed)}, {flashed}")
-    # pg(g)
-
     extra_flashed = -1
     while extra_flashed != 0:
         extra_flashed = 0
@@ -87,13 +83,8 @@ def step_grid(g):
                         flashed.add((r,c))
                         extra_flashed += 1
 
-    # print("step ... extra flashes")
-    # print(f"flashed: {len(flashed)}, {flashed}")
-    # pg(g)
-    # print("total flashed this step:", len(flashed))
-
-    pgf(g, flashed)
-
+    # debug print surprisingly useful / pretty
+    # pgf(g, flashed)
     return g, len(flashed)
 
 def pg(g):
@@ -110,32 +101,12 @@ def pgf(g, f):
             else:
                 to_print.append(f"{g[r][c]}")
         print(" ".join(to_print))
-            
-tg = [
-    "11111",
-    "19991",
-    "19191",
-    "19991",
-    "11111"
-]
-g = read_octopus_grid(tg)
-print("test grid:")
-pg(g)
-g, f = step_grid(g)
-print()
-print("flashed:", f)
-print()
-g, f = step_grid(g)
-print()
-pg(g)
-print("flashed:", f)
-print()
 
 def part1(input):
     steps = 100
     flashes = 0
     g = read_octopus_grid(input)
-    pg(g)
+    # pg(g)
     for s in range(steps):
         # print(f"step {s}")
         g, f = step_grid(g)
@@ -145,8 +116,17 @@ def part1(input):
 
 
 def part2(input):
-    return None
+    g = read_octopus_grid(input)
+    all_flashed = False
+    s = 0
+    gs = len(g) * len(g[0])
+    while not all_flashed:
+        # print(f"step {s}")
+        g, f = step_grid(g)
+        s += 1
+        all_flashed = gs == f
 
+    return s
 
 import os.path
 day = os.path.basename(__file__).split('.')[0][-2:]
@@ -154,5 +134,5 @@ input = list((l.strip() for l in open(f"./inputs/day{day}").readlines()))
 print(f"Day {day}")
 print("test part 1:", part1(test_input))
 print("part 1:", part1(input))
-# print("test part 2:", part2(test_input))
-# print("part 2:", part2(input))
+print("test part 2:", part2(test_input))
+print("part 2:", part2(input))
