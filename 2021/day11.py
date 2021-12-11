@@ -65,9 +65,13 @@ def step_grid(g):
     # now do any follow up flashes based on neighbors incremented
     # until we stop flashing additional cells
 
+    # keep looping until we stop flashing extra cells ...
     extra_flashed = -1
     while extra_flashed != 0:
         extra_flashed = 0
+
+        # first bump neighbours for any cells flashed last iteration
+        # (and track the ones which were bumped in neighbors_flashed to prevent duplicates)
         for (r, c) in list(flashed):
             if (r, c) not in neighbors_flashed:
                 to_bump = neighbors(r, c, len(g[0]) - 1)
@@ -75,6 +79,12 @@ def step_grid(g):
                     if (rr, cc) not in flashed:
                         g[rr][cc] += 1
                 neighbors_flashed.add((r, c))
+        # now go through grid again to see are were any extra cells flashed
+        # if they were add them to flashed (and not neighbors_flashed yet)
+        # and increment extra_flashed so we keep looping through to get neighbors on next iteration
+        #
+        # yes this could be clearer and probably should be recursive, but, it works
+        # and gets to a stable state for valid input
         for r in range(len(g)):
             for c in range(len(g)):
                 if g[r][c] >= 10:
