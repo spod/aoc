@@ -120,6 +120,10 @@ def part2(data):
     ]
 
     for line in data:
+
+        # substitution from original to scrambled
+        key = {}
+
         # possible candidates that character maps to see example above
         candidates = defaultdict(set)
 
@@ -137,25 +141,57 @@ def part2(data):
                 num_to_seq[n] = seq
                 for c in digits_to_chrs[n]:
                     if len(candidates[c]) == 0:
-                        print(f"{n}) adding {seq} as candidate for {c}")
+                        #print(f"{n}) adding {seq} as candidate for {c}")
                         candidates[c] |= set(list(seq))
         # now figure out the rest!
         # - reduce
-        #   - if candidate set is a superset of smaller sets for other candidates
-        #     then we can remove the smaller set from this candidate set ...
-        #        eg. 'a': {'b', 'a', 'd'}
-        #            'c': {'b', 'a'}
-        #            'f': {'b', 'a'}
-        #         so given {'b','a'} is 'covered' for both 'c' & 'f' we know
-        #            'a': {'d'}
         # - once we have reduced, can we match any further sequences to a number?
         # - guess if can't reduce further?
-        print(num_to_seq)
-        print(candidates)
+        print("known:", num_to_seq)
+        print(f"candidates: {candidates}")
+        while reduce(candidates) != candidates:
+            candidates = reduce(candidates)
+        print(f"reduced candidates: {candidates}")
+        for k, v in candidates.items():
+            if len(v) == 1:
+                key[k] = v.pop()
+
         to_solve = set(list(range(0, 9+1))) - set(num_to_seq.keys())
         print("To solve:", to_solve)
 
+        print(f"known key: {key}")
     return None
+
+def reduce(candidates):
+    # - reduce
+    #   - if candidate set is a superset of smaller sets for other candidates
+    #     then we can remove the smaller set from this candidate set ...
+    #        eg. 'a': {'b', 'a', 'd'}
+    #            'c': {'b', 'a'}
+    #            'f': {'b', 'a'}
+    #         so given {'b','a'} is 'covered' for both 'c' & 'f' we know
+    #            'a': {'d'}
+
+    result = defaultdict(set)
+    doubles = []
+    singles = []
+    for c, options in candidates.items():
+        if len(options) == 1:
+            if options not in singles:
+                singles.append(options)
+        if len(options) == 2:
+            if options not in doubles:
+                doubles.append(options)
+    for c, options in candidates.items():
+        if len(options) > 2:
+            for sgl in singles:
+                if sgl <= options:
+                    options = options - sgl
+            for dbl in doubles:
+                if dbl <= options:
+                    options = options - dbl
+        result[c] = options
+    return result
 
 
 day = os.path.basename(__file__).split('.')[0][-2:]
