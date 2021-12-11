@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+import os.path
 test_input = [
     "[({(<(())[]>[[{[]{<()<>>",
     "[(()[<>])]({[<{<<[]>>(",
@@ -19,6 +20,7 @@ matches = {
     "{": "}",
     "<": ">"
 }
+
 
 def check_line(line):
     # returns (valid, error_character)
@@ -57,6 +59,7 @@ def check_line(line):
 #         else:
 #             print(f"OK - {t}")
 
+
 illegal_points = {
     ")": 3,
     "]": 57,
@@ -74,11 +77,42 @@ def part1(input):
     return score
 
 
+def complete_line(line):
+    stack = []
+    for c in line:
+        if c in matches.keys():
+            stack.append(c)
+        elif c in matches.values():
+            l = stack.pop()
+        else:
+            print(f"Unexpected {c}")
+    return "".join([matches[c] for c in stack[::-1]])
+
+
+complete_pts = {
+    ')': 1,
+    ']': 2,
+    '}': 3,
+    '>': 4
+}
+
+
 def part2(input):
-    return None
+    scores = []
+    for line in input:
+        (v, _) = check_line(line)
+        if v:
+            r = complete_line(line)
+            if len(r) > 0:
+                score = 0
+                for c in r:
+                    score *= 5
+                    score += complete_pts[c]
+                scores.append(score)
+    scores.sort()
+    return scores[int((len(scores))/2)]
 
 
-import os.path
 day = os.path.basename(__file__).split('.')[0][-2:]
 input = list((l.strip() for l in open(f"./inputs/day{day}").readlines()))
 print(f"Day {day}")
