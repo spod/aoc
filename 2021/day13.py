@@ -26,8 +26,8 @@ test_input = [
     "8,10",
     "9,0",
     "",
-    "fold along y=7"
-    #"fold along x=5"
+    "fold along y=7",
+    "fold along x=5"
 ]
 
 
@@ -70,6 +70,23 @@ def fold_dots(dots, fold):
     return list(new_dots)
 
 
+def print_dots(dots):
+    max_x, max_y = 0, 0
+    for p in dots:
+        if p.x > max_x:
+            max_x = p.x
+        if p.y > max_y:
+            max_y = p.y
+    g = [[] for _ in range(max_y + 1)]
+    for y in range(max_y + 1):
+        for _ in range(max_x + 1):
+            g[y].append(' ')
+    for p in dots:
+        g[p.y][p.x] = '#'
+    for l in g:
+        print("".join(l))
+
+
 def part1(input):
     dots, folds = parse_input(input)
     dots = fold_dots(dots, folds[0])
@@ -77,7 +94,10 @@ def part1(input):
 
 
 def part2(input):
-    return None
+    dots, folds = parse_input(input)
+    for fold in folds:
+        dots = fold_dots(dots, fold)
+    print_dots(dots)
 
 
 day = os.path.basename(__file__).split('.')[0][-2:]
@@ -85,5 +105,5 @@ input = list((l.strip() for l in open(f"./inputs/day{day}").readlines()))
 print(f"Day {day}")
 print("test part 1:", part1(test_input))
 print("part 1:", part1(input))
-# print("test part 2:", part2(test_input))
-# print("part 2:", part2(input))
+print("test part 2:", part2(test_input))
+print("part 2:", part2(input))
