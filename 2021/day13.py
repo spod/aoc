@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 
 import os.path
-from os import name
 from collections import namedtuple
 
 Point = namedtuple('Point', ['x', 'y'])
