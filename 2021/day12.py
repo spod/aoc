@@ -1,16 +1,34 @@
 #! /usr/bin/env python
+import os.path
+from collections import defaultdict
+test_input = [
+    "start-A",
+    "start-b",
+    "A-c",
+    "A-b",
+    "b-d",
+    "A-end",
+    "b-end"
+]
 
-test_input = []
+
+def input_to_graph(input):
+    g = defaultdict(list)
+    for line in input:
+        s, d = line.split('-')
+        g[s].append(d)
+    return g
+
 
 def part1(input):
-    return None
+    g = input_to_graph(input)
+    print(g)
 
 
 def part2(input):
     return None
 
 
-import os.path
 day = os.path.basename(__file__).split('.')[0][-2:]
 input = list((l.strip() for l in open(f"./inputs/day{day}").readlines()))
 print(f"Day {day}")
