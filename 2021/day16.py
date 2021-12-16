@@ -33,19 +33,18 @@ def parse_literal_packet(packet):
         return None
     return parse_literal(packet[6:])
 
-def parse_literal(literal_bin):
+def parse_literal(bits):
     # literals are groups of 5 bits, first bit indicates if this is the last group or not
-    print(f"parse_literal({literal_bin}) - ", end = ' ')
+    remainder = bits
     literal = ''
     n = 0
     last = False
     while not last:
-        last = literal_bin[n] == '0'
-        print(f"n: {n}, raw: {literal_bin[n:n+5]}, last: {last}, rest: {literal_bin[n+1:n+5]}; ", end = ' ')
-        literal += literal_bin[n+1:n+5]
+        last = bits[n] == '0'
+        literal += bits[n+1:n+5]
+        remainder = remainder[5:]
         n = n + 5
-    print(f' - literal: {literal}, {int(literal, 2)}')
-    return int(literal, 2)
+    return (int(literal, 2), remainder)
 
 
 def parse_operator_packet(packet):
@@ -67,6 +66,12 @@ def parse_operator_packet(packet):
         sub_packet_bits_to_read = int(packet[7:20], 2)
         print(f"    - TODO read {sub_packet_bits_to_read} bits of sub packets")
         print(f"      rest: {packet[20:]}")
+        last_rest = None
+        rest = packet[20:]
+        while len(rest) >= 5:
+            (v, rest) = parse_literal(rest)
+            print(v, ' ', rest, ' ', end = ' ')
+        print()
     # Operator Length Type 1
     #     11101110000000001101010000001100100000100011000001100000
     #     VVVTTTILLLLLLLLLLLAAAAAAAAAAABBBBBBBBBBBCCCCCCCCCCC
@@ -79,38 +84,34 @@ def parse_operator_packet(packet):
         sub_packets_to_read = int(packet[7:18], 2)
         print(f"    - TODO read {sub_packets_to_read} sub packets")
         print(f"      rest: {packet[18:]}")
+        last_rest = None
+        rest = packet[18:]
+        while rest != last_rest and len(rest) >= 5:
+            last_rest = rest
+            (v, rest) = parse_literal(rest)
+            print(v)
 
-
-print(parse_literal('101111111000101000')) # 2021
-# 11010001010
-# 11010
-# 1 more, 1010 (10)
-# 00101
-# 0 last, 0101 (5)
-# print(parse_literal('11010001010')) #10
-# print(parse_literal('1101000101001010010001001000000000'))
-# print(parse_literal('01010010001001000000000'))
-# print(parse_literal('0101001000100100'))
-# print(parse_literal('01010000001'))
-# print(parse_literal('10010000010'))
-# print(parse_literal('0011000001100000'))
-#import sys; sys.exit(0)
 
 def part1(input):
     print()
     packet = hex2bin(input[0])
+    versions = []
+    versions.append(packet_version(packet))
     print(
         f"Debug info for packet: {input[0]} ({packet})\n - version: {packet_version(packet)}\n - type: {packet_type(packet)}")
     if packet_type(packet) == 4:
         print(f" - literal packet, value: {parse_literal_packet(packet)}")
     else:
         print(f" - operator packet, {parse_operator_packet(packet)}")
+        # need to iterate through sub packets and get their versions added to version
     print()
-    return None
+    return sum(versions)
 
 
 def part2(input):
     return None
+
+print(parse_literal('01010000001100100000100011000001100000'))
 
 
 day = os.path.basename(__file__).split('.')[0][-2:]
