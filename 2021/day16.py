@@ -86,6 +86,7 @@ def parse_operator_packet(packet):
         print(f"      rest: {packet[18:]}")
         last_rest = None
         rest = packet[18:]
+        # need to recursively call packet stuff ...
         while rest != last_rest and len(rest) >= 5:
             last_rest = rest
             (v, rest) = parse_literal(rest)
