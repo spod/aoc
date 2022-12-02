@@ -1,6 +1,9 @@
 #! /usr/bin/env python
+import os.path
 
-test_input = """
+day = os.path.basename(__file__).split('.')[0][-2:]
+
+test_input_raw = """
 1000
 2000
 3000
@@ -16,14 +19,14 @@ test_input = """
 
 10000
 """
-
-input = open("./inputs/day01").read()
+test_input = list(l.strip() for l in test_input_raw.splitlines())
+input = list((l.strip() for l in open(f"./inputs/day{day}").readlines()))
 
 
 def partA(input):
     currTotal = 0
     maxTotal = 0
-    for line in input.split("\n"):
+    for line in input:
         if line == "":
             if currTotal > maxTotal:
                 maxTotal = currTotal
@@ -40,7 +43,7 @@ print("partA:", partA(input))
 def partB(input):
     totals = []
     currTotal = 0
-    for line in input.split("\n"):
+    for line in input:
         if line == "":
             totals.append(currTotal)
             currTotal = 0
