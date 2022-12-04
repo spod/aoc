@@ -25,15 +25,14 @@ if "" in input:
 
 def pl(line):
     l, r = line.split(",")
-    lmin, lmax = l.split("-")
-    lmin, lmax = int(lmin), int(lmax)
-    rmin, rmax = r.split("-")
-    rmin, rmax = int(rmin), int(rmax)
+    (lmin, lmax), (rmin, rmax) = l.split("-"), r.split("-")
+    lmin, lmax, rmin, rmax = int(lmin), int(lmax), int(rmin), int(rmax)
     return (set(range(lmin, lmax + 1)), set(range(rmin, rmax + 1)))
 
 
 def part1(input):
-    return len(list(filter(lambda t: t[0].issubset(t[1]) or t[1].issubset(t[0]), map(pl, input))))
+    return len(list(filter(lambda t: t[0].issubset(t[1]) or t[1].issubset(t[0]),
+                           map(pl, input))))
 
 
 print("test part 1:", part1(test_input))
