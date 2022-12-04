@@ -33,8 +33,7 @@ def pl(line):
 
 
 def part1(input):
-    f = lambda l: pl(l)[0].issubset(pl(l)[1]) or pl(l)[1].issubset(pl(l)[0])
-    return len(list(filter(f, input)))
+    return len(list(filter(lambda t: t[0].issubset(t[1]) or t[1].issubset(t[0]), map(pl, input))))
 
 
 print("test part 1:", part1(test_input))
@@ -42,7 +41,7 @@ print("part 1:", part1(input))
 
 
 def part2(input):
-    return len(list(filter(lambda l: pl(l)[0] & pl(l)[1], input)))
+    return len(list(filter(lambda t: t[0] & t[1], map(pl, input))))
 
 
 print("test part 2:", part2(test_input))
