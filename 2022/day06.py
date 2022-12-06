@@ -31,14 +31,19 @@ def sliding_window(iterable, n):
         yield tuple(window)
 
 
+def unique_window_marker(buffer, window_size):
+    for chunk in sliding_window(buffer, window_size):
+        if len(set(chunk)) == window_size:
+            schunk = "".join(chunk)
+            marker = buffer.find(schunk) + window_size
+            print(f"signal starts at: {schunk}, marker position:{marker}")
+            return marker
+    return -1
+
+
 def part1(input):
     line = input[0]
-    for (p1, p2, p3, p4) in sliding_window(line, 4):
-        if len(set([p1, p2, p3, p4])) == 4:
-            print(f"signal starts at: {p1}{p2}{p3}{p4}")
-            print(line.find("".join([p1, p2, p3, p4])) + 4)
-            return line.find("".join([p1, p2, p3, p4])) + 4
-    return None
+    return unique_window_marker(line, 4)
 
 
 print("test part 1:", part1(test_input))
@@ -47,13 +52,7 @@ print("part 1:", part1(input))
 
 def part2(input):
     line = input[0]
-    for chunk in sliding_window(line, 14):
-        if len(set(chunk)) == 14:
-            schunk = "".join(chunk)
-            print(f"signal starts at: {schunk}")
-            print(line.find(schunk) + 14)
-            return line.find(schunk) + 14
-    return None
+    return unique_window_marker(line, 14)
 
 
 print("test part 2:", part2(test_input))
