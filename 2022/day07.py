@@ -41,42 +41,32 @@ if "" in test_input:
 def get_dir_sizes(input):
     dir_sizes = defaultdict(int)
     pwd = "/"
-    ls_output = False
     for line in input[1:]:
         if line[0] == "$":
-            ls_output = False
-            command = line.split()[1]
-            if command == "cd":
-                cd_arg = line.split()[2]
-                if cd_arg == "..":
+            if line[2:4] == "ls":
+                continue  # skip to next line as we assume non command output is ls output
+            (cmd, arg) = line[1:].split()
+            if cmd == "cd":
+                if arg == "..":
                     pwd = os.path.dirname(pwd)
                 else:
-                    pwd = os.path.join(pwd, cd_arg)
-            if command == "ls":
-                ls_output = True
+                    pwd = os.path.join(pwd, arg)
+        else:
+            if line[0:3] == "dir":
                 continue
-        elif ls_output:
-            (a, _) = line.split()
-            if a == "dir":
-                continue
-            else:
-                fsize = int(a)
-                dir_sizes[pwd] += fsize
-                d = pwd
-                while os.path.dirname(d) != d:
-                    d = os.path.dirname(d)
-                    dir_sizes[d] += fsize
+            fsize = int(line.split()[0])
+            dir_sizes[pwd] += fsize
+            # also need to increase size of all parent directories
+            d = pwd
+            while os.path.dirname(d) != d:
+                d = os.path.dirname(d)
+                dir_sizes[d] += fsize
     return dir_sizes
 
 
 def part1(input):
     dir_sizes = get_dir_sizes(input)
-    total_lte_10k = 0
-    for dsize in dir_sizes.values():
-        if dsize <= 100000:
-            total_lte_10k += dsize
-
-    return total_lte_10k
+    return sum(filter(lambda sz: sz <= 100000, dir_sizes.values()))
 
 
 print("test part 1:", part1(test_input))
@@ -85,22 +75,12 @@ print("part 1:", part1(input))
 
 def part2(input):
     dir_sizes = get_dir_sizes(input)
-
-    disk_size = 70000000
-    update_size = 30000000
-    used_size = dir_sizes["/"]
-    unused_size = disk_size - used_size
-    if unused_size < update_size:
-        space_needed = update_size - unused_size
-
-    deletion_candidates = []
-    for d, dsize in dir_sizes.items():
-        if dsize >= space_needed:
-            deletion_candidates.append((d, dsize))
-
-    candidate_sizes = [dt[1] for dt in deletion_candidates]
-    candidate_sizes.sort()
-    return candidate_sizes[0]
+    space_needed = 30000000 - (70000000 - dir_sizes["/"])
+    deletion_candidates = list(
+        filter(lambda sz: sz >= space_needed, dir_sizes.values())
+    )
+    deletion_candidates.sort()
+    return deletion_candidates[0]
 
 
 print("test part 2:", part2(test_input))
