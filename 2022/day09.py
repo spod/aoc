@@ -76,6 +76,25 @@ def parse_input(input):
     return moves
 
 
+TAIL_MOVES = {
+        (0, 2): (0, 1),
+        (0, -2): (0, -1),
+        (2, 0): (1, 0),
+        (-2, 0): (-1, 0),
+        (1, 2): (1, 1),
+        (-1, 2): (-1, 1),
+        (1, -2): (1, -1),
+        (-1, -2): (-1, -1),
+        (2, 1): (1, 1),
+        (2, -1): (1, -1),
+        (-2, 1): (-1, 1),
+        (-2, -1): (-1, -1),
+        (2, 2): (1, 1),
+        (2, -2): (1, -1),
+        (-2, 2): (-1, 1),
+        (-2, -2): (-1, -1)
+    }
+
 def tail_follow(head, tail, direction):
     # return new tail location
     # if touch horizontal/vertical/diagonal - no move
@@ -86,11 +105,10 @@ def tail_follow(head, tail, direction):
         tail.move(direction)
         return tail
     # diagonal
-    tail.move(direction)
-    if direction in ["U", "D"]:
-        tail.c = head.c
-    if direction in ["L", "R"]:
-        tail.r = head.r
+    (nr, nc) = (head.r - tail.r, head.c - tail.c)
+    (dr, dc) = TAIL_MOVES[nr, nc]
+    tail.r += dr
+    tail.c += dc
     return tail
 
 
@@ -121,6 +139,7 @@ def pg(g):
         print("".join([str(c) for c in r]))
 
 def print_rope(rope, rr, rc):
+    print([s.tup() for s in rope])
     g = [[] for _ in range(rc + 1)]
     for r in range(rr + 1):
         for _ in range(rc + 1):
@@ -134,27 +153,24 @@ def print_rope(rope, rr, rc):
         idx -= 1
     pg(g)
 
-def part2(input, w, h):
+def part2(input):
     rope = [Loc(0,0) for _ in range(10)]
     tail_locations = set()
-    tail_locations.add(rope[-1].tup())
+    tail_locations.add(rope[9].tup())
 
     moves = parse_input(input)
 
     for (direction, count) in moves:
-        print()
-        print("move:", direction, count)
         for _ in range(0, count):
             rope[0].move(direction)
-            for k in range(1, 10):
+            for k in range(1, len(rope)):
                 rope[k] = tail_follow(rope[k -1], rope[k], direction)
-            tail_locations.add(rope[-1].tup())
-        print_rope(rope, w, h)
+            tail_locations.add(rope[9].tup())
 
-    # print(sorted(list(tail_locations)))
+
+    print(tail_locations)
     return len(tail_locations)
 
-print("test part 2:", part2(test_input, 5, 5))
-#print("test part 2 2:", part2(test2_input))
-
-#print("part 2:", part2(input))
+print("test part 2:", part2(test_input))
+print("test part 2 2:", part2(test2_input))
+print("part 2:", part2(input))
