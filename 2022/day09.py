@@ -77,23 +77,24 @@ def parse_input(input):
 
 
 TAIL_MOVES = {
-        (0, 2): (0, 1),
-        (0, -2): (0, -1),
-        (2, 0): (1, 0),
-        (-2, 0): (-1, 0),
-        (1, 2): (1, 1),
-        (-1, 2): (-1, 1),
-        (1, -2): (1, -1),
-        (-1, -2): (-1, -1),
-        (2, 1): (1, 1),
-        (2, -1): (1, -1),
-        (-2, 1): (-1, 1),
-        (-2, -1): (-1, -1),
-        (2, 2): (1, 1),
-        (2, -2): (1, -1),
-        (-2, 2): (-1, 1),
-        (-2, -2): (-1, -1)
-    }
+    (0, 2): (0, 1),
+    (0, -2): (0, -1),
+    (2, 0): (1, 0),
+    (-2, 0): (-1, 0),
+    (1, 2): (1, 1),
+    (-1, 2): (-1, 1),
+    (1, -2): (1, -1),
+    (-1, -2): (-1, -1),
+    (2, 1): (1, 1),
+    (2, -1): (1, -1),
+    (-2, 1): (-1, 1),
+    (-2, -1): (-1, -1),
+    (2, 2): (1, 1),
+    (2, -2): (1, -1),
+    (-2, 2): (-1, 1),
+    (-2, -2): (-1, -1),
+}
+
 
 def tail_follow(head, tail, direction):
     # return new tail location
@@ -134,9 +135,11 @@ def part1(input):
 print("test part 1:", part1(test_input))
 print("part 1:", part1(input))
 
+
 def pg(g):
     for r in g:
         print("".join([str(c) for c in r]))
+
 
 def print_rope(rope, rr, rc):
     print([s.tup() for s in rope])
@@ -153,8 +156,9 @@ def print_rope(rope, rr, rc):
         idx -= 1
     pg(g)
 
+
 def part2(input):
-    rope = [Loc(0,0) for _ in range(10)]
+    rope = [Loc(0, 0) for _ in range(10)]
     tail_locations = set()
     tail_locations.add(rope[9].tup())
 
@@ -164,12 +168,12 @@ def part2(input):
         for _ in range(0, count):
             rope[0].move(direction)
             for k in range(1, len(rope)):
-                rope[k] = tail_follow(rope[k -1], rope[k], direction)
+                rope[k] = tail_follow(rope[k - 1], rope[k], direction)
             tail_locations.add(rope[9].tup())
-
 
     print(tail_locations)
     return len(tail_locations)
+
 
 print("test part 2:", part2(test_input))
 print("test part 2 2:", part2(test2_input))
