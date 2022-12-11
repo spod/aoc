@@ -165,16 +165,19 @@ def part2(input):
     moves = parse_input(input)
 
     for (direction, count) in moves:
+        print()
+        print("move:", direction, count)
         for _ in range(0, count):
             rope[0].move(direction)
             for k in range(1, len(rope)):
                 rope[k] = tail_follow(rope[k - 1], rope[k], direction)
             tail_locations.add(rope[9].tup())
+        print_rope(rope, 25, 25)
 
     print(tail_locations)
     return len(tail_locations)
 
 
-print("test part 2:", part2(test_input))
+#print("test part 2:", part2(test_input))
 print("test part 2 2:", part2(test2_input))
-print("part 2:", part2(input))
+#print("part 2:", part2(input))
