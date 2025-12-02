@@ -1,0 +1,44 @@
+#! /usr/bin/env python3
+import os.path
+
+day = os.path.basename(__file__).split('.')[0][-2:]
+
+test_input_raw = """
+11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528,446443-446449,38593856-38593862,565653-565659,824824821-824824827,2121212118-2121212124
+"""
+test_input = list(l.strip() for l in test_input_raw.splitlines())
+test_input.remove("")
+input = list((l.strip() for l in open(f"./inputs/day{day}").readlines()))
+
+def silly_ids(idRange):
+    silly = []
+    l, r = idRange.split('-')
+    minId = int(l)
+    maxId = int(r)
+    for v in range(minId, maxId+1):
+        sv = str(v)
+        if len(sv) % 2 == 0:
+            m = int(len(sv)/2)
+            l = sv[:m]
+            r = sv[m:]
+            if l == r:
+                print(f"invalid ID: {sv}")
+                silly.append(v)
+    return silly
+
+def partA(input):
+    sillyIds = []
+    idRanges = input[0].split(',')
+    for idRange in idRanges:
+        sillyIds.extend(silly_ids(idRange))
+    print(sillyIds)
+    return sum(sillyIds)
+
+print("test partA:", partA(test_input))
+print("partA:", partA(input))
+
+def partB(input):
+    return "TODO"
+
+print("test partB:", partB(test_input))
+print("partB:", partB(input))
