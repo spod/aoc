@@ -22,7 +22,7 @@ def silly_ids(idRange):
             l = sv[:m]
             r = sv[m:]
             if l == r:
-                print(f"invalid ID: {sv}")
+                # print(f"invalid ID: {sv}")
                 silly.append(v)
     return silly
 
@@ -31,14 +31,48 @@ def partA(input):
     idRanges = input[0].split(',')
     for idRange in idRanges:
         sillyIds.extend(silly_ids(idRange))
-    print(sillyIds)
+    # print(sillyIds)
     return sum(sillyIds)
 
 print("test partA:", partA(test_input))
 print("partA:", partA(input))
 
+def invalid(id):
+    # 12341234 - 1234, 1234 above
+    # 123123123 - 123, 123, 123 - 123 x 3
+    # 1212121212 - 12, 12, 12, 12, 12 - 12 x 5
+    # 1111111 - 1, 1, 1, 1, 1, 1, 1 - 1 x 7
+    midp = int(len(id)/2)
+    length = len(id)
+    for k in range(1, midp + 1):
+        repeats, remainder = divmod(length, k)
+        if remainder == 0:
+            candidate = id[:k] * repeats
+            if id == candidate:
+                return True
+    return False
+
+def check_range(idRange):
+    silly = []
+    l, r = idRange.split('-')
+    minId = int(l)
+    maxId = int(r)
+    for v in range(minId, maxId+1):
+        if invalid(str(v)):
+            silly.append(v)
+    return silly
+
 def partB(input):
-    return "TODO"
+    sillyIds = []
+    idRanges = input[0].split(',')
+    for idRange in idRanges:
+        sillyIds.extend(check_range(idRange))
+    # print(sillyIds)
+    return sum(sillyIds)
+
+# test_values = ["1", "12", "12341234", "1212121212", "1111111"]
+# for tc in test_values:
+#     print(f"{tc}: {invalid(tc)}")
 
 print("test partB:", partB(test_input))
 print("partB:", partB(input))
