@@ -20,7 +20,7 @@ test_input.remove("")
 input = list((l.strip() for l in open(f"./inputs/day{day}").readlines()))
 
 
-def partA(input):
+def partA(input: list[str]):
     curr = 50
     zeroPoints = 0
     for line in input:
@@ -38,7 +38,7 @@ print("test partA:", partA(test_input))
 print("partA:", partA(input))
 
 
-def partB(input):
+def partB(input: list[str]):
     position = start = 50
     clicks = 0
     for line in input:

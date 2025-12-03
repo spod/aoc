@@ -10,8 +10,8 @@ test_input = list(l.strip() for l in test_input_raw.splitlines())
 test_input.remove("")
 input = list((l.strip() for l in open(f"./inputs/day{day}").readlines()))
 
-def silly_ids(idRange):
-    silly = []
+def silly_ids(idRange: str) -> list[int]:
+    silly: list[int] = []
     l, r = idRange.split('-')
     minId = int(l)
     maxId = int(r)
@@ -26,8 +26,8 @@ def silly_ids(idRange):
                 silly.append(v)
     return silly
 
-def partA(input):
-    sillyIds = []
+def partA(input: list[str]):
+    sillyIds: list[int] = []
     idRanges = input[0].split(',')
     for idRange in idRanges:
         sillyIds.extend(silly_ids(idRange))
@@ -37,7 +37,7 @@ def partA(input):
 print("test partA:", partA(test_input))
 print("partA:", partA(input))
 
-def invalid(id):
+def invalid(id: str):
     # 12341234 - 1234, 1234 above
     # 123123123 - 123, 123, 123 - 123 x 3
     # 1212121212 - 12, 12, 12, 12, 12 - 12 x 5
@@ -52,8 +52,8 @@ def invalid(id):
                 return True
     return False
 
-def check_range(idRange):
-    silly = []
+def check_range(idRange: str) -> list[int]:
+    silly: list[int] = []
     l, r = idRange.split('-')
     minId = int(l)
     maxId = int(r)
@@ -62,8 +62,8 @@ def check_range(idRange):
             silly.append(v)
     return silly
 
-def partB(input):
-    sillyIds = []
+def partB(input: list[str]):
+    sillyIds: list[int] = []
     idRanges = input[0].split(',')
     for idRange in idRanges:
         sillyIds.extend(check_range(idRange))
