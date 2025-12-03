@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 import os.path
 
-day = os.path.basename(__file__).split('.')[0][-2:]
+day = os.path.basename(__file__).split(".")[0][-2:]
 
 test_input_raw = """
 L68
@@ -24,7 +24,7 @@ def partA(input: list[str]):
     curr = 50
     zeroPoints = 0
     for line in input:
-        (direction, amount) = (line[0], int(line[1:]))            
+        (direction, amount) = (line[0], int(line[1:]))
         if direction == "L":
             curr = (curr - amount) % 100
         if direction == "R":
@@ -42,7 +42,7 @@ def partB(input: list[str]):
     position = start = 50
     clicks = 0
     for line in input:
-        (direction, amount) = (line[0], int(line[1:]))            
+        (direction, amount) = (line[0], int(line[1:]))
         if direction == "L":
             position -= amount
         if direction == "R":
@@ -58,6 +58,7 @@ def partB(input: list[str]):
         clicks += count
         start = position
     return clicks
+
 
 print("test partB:", partB(test_input))
 print("partB:", partB(input))
