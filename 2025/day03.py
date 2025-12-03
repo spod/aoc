@@ -62,10 +62,10 @@ test_values = [
     ("818181911112111", 12, 888911112111),
 ]
 
-for tc in test_values:
-    print(
-        f"max_joltage({tc[0]}, {tc[1]}) = {max_joltage(tc[0], tc[1])}, expected {tc[2]}"
-    )
+# for tc in test_values:
+#     print(
+#         f"max_joltage({tc[0]}, {tc[1]}) = {max_joltage(tc[0], tc[1])}, expected {tc[2]}"
+#     )
 
 
 def part1(input: list[str]):
