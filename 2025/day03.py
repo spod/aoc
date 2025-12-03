@@ -17,7 +17,7 @@ test_input = list(l.strip() for l in test_input_raw.splitlines())
 input = list((l.strip() for l in open(f"./inputs/day{day}").readlines()))
 
 def max_joltage(bank: str, cells: int):
-    cell_combos = list(combinations([int(c) for c in bank], cells))
+    cell_combos = list(set(combinations([int(c) for c in bank], cells)))
     max_pair = cell_combos[0]
     for p in cell_combos:
         if p > max_pair:
