@@ -108,6 +108,7 @@ def part1(input: list[str]):
     for r in range(0, max_r + 1):
         for c in range(0, max_c + 1):
             cc = Cell(r, c)
+            # this line took so long to figure out, read spec carefully
             if g_cell_value(grid, cc) == "@":
                 neighbours = g_adj_cell_values(grid, cc)
                 if neighbours.count("@") < 4:
