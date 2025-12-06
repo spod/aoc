@@ -9,8 +9,7 @@ from grid import *
 day = os.path.basename(__file__).split(".")[0][-2:]
 print(f"Day {day}")
 
-test_input_raw = """
-123 328  51 64 
+test_input_raw = """123 328  51 64 
  45 64  387 23 
   6 98  215 314
 *   +   *   +  
@@ -54,20 +53,26 @@ def part1(input: list[str]):
             results.append(reduce(fadd, columns[col]))
         elif operators[col] == "*":
             results.append(reduce(fmul, columns[col]))
-    print(f"#rows: {n_rows}, #columns: {n_cols}")  # , results: {results}")
+    # print(f"#rows: {n_rows}, #columns: {n_cols}")  # , results: {results}")
     return sum(results)
 
 
 print("test part 1:", part1(test_input))
 print("part 1:", part1(input))
 
+print()
+
 
 def part2(input: list[str]):
-    grid = build_grid(input[:-1])
+    grid = build_grid(input[:-1], "0")
     operators = input[-1].split()
-    # (max_r, max_c) = g_size(grid)
-    g_print(grid)
+    (_, max_c) = grid.size()
+    grid.print()
     print(f"operators: {operators}")
+
+    for c in range(max_c + 1):
+        if sum([int(v) for v in grid.col_values(c)]) == 0:
+            print(f"separator column: {c}")
 
 
 print("test part 2:", part2(raw_test_input))
