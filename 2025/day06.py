@@ -19,7 +19,7 @@ test_input = list(ln.strip() for ln in test_input_raw.splitlines())
 input = list((ln.strip() for ln in open(f"./inputs/day{day}").readlines()))
 
 raw_test_input = list(ln for ln in test_input_raw.splitlines())
-raw_input = list((ln for ln in open(f"./inputs/day{day}").readlines()))
+raw_input = list((ln.rstrip() for ln in open(f"./inputs/day{day}").readlines()))
 if "" in raw_test_input:
     raw_test_input.remove("")
 if "" in raw_input:
@@ -63,17 +63,45 @@ print("part 1:", part1(input))
 print()
 
 
-def part2(input: list[str]):
-    grid = build_grid(input[:-1], "0")
-    operators = input[-1].split()
-    (_, max_c) = grid.size()
-    grid.print()
-    print(f"operators: {operators}")
+def solve_problem(g: Grid, operator: str) -> int:
+    results: list[int] = []
+    (_, max_c) = g.size()
+    for c in range(max_c, -1, -1):
+        results.append(int("".join([v for v in g.col_values(c)])))
+    if operator == "*":
+        return reduce(fmul, results)
+    return sum(results)
 
-    for c in range(max_c + 1):
-        if sum([int(v) for v in grid.col_values(c)]) == 0:
-            print(f"separator column: {c}")
+
+def part2(input: list[str]):
+    grid = build_grid(input[:-1])
+    operators = input[-1].split()
+    (max_r, max_c) = grid.size()
+
+    # find separators that split problems (an entire column of ' 's)
+    separators: list[int] = []
+    for c in range(max_c):
+        if len(set(grid.col_values(c))) == 1 and grid.col_values(c)[0] == " ":
+            separators.append(c)
+
+    # build a list of problems, which are sub grids of overall grid divided by separators
+    problems: list[Grid] = []
+    start_c = 0
+    for sep in separators:
+        prob = sub_grid(grid, Point(0, start_c), Point(max_r, sep - 1))
+        problems.append(prob)
+        start_c = sep + 1
+    # last problem is between last separator and end of grid
+    last_prob = sub_grid(grid, Point(0, start_c), Point(max_r, max_c))
+    problems.append(last_prob)
+
+    results: list[int] = []
+    k = 0
+    for prob in problems:
+        results.append(solve_problem(prob, operators[k]))
+        k += 1
+    return sum(results)
 
 
 print("test part 2:", part2(raw_test_input))
-# print("part 2:", part2(raw_input))
+print("part 2:", part2(raw_input))

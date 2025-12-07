@@ -59,7 +59,7 @@ class Grid:
         results: list[Point] = []
         for o in offsets:
             n = p + o
-            if n.valid(self):
+            if valid(n, self):
                 results.append(n)
         return results
 
@@ -90,3 +90,14 @@ def build_grid(input: list[str], fill: str = "") -> Grid:
     for line in input:
         g.append([char_or_fill(c, fill) for c in line])
     return Grid(g)
+
+
+def sub_grid(g: Grid, tl: Point, br: Point) -> Grid:
+    rg: list[list[str]] = []
+
+    for r in range(tl.r, br.r + 1):
+        rg.append([])
+        for c in range(tl.c, br.c + 1):
+            rg[r].append(g.get_value_at(Point(r, c)))
+
+    return Grid(rg)
