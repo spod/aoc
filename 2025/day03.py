@@ -12,8 +12,8 @@ test_input_raw = """987654321111111
 818181911112111
 """
 
-test_input = list(l.strip() for l in test_input_raw.splitlines())
-input = list((l.strip() for l in open(f"./inputs/day{day}").readlines()))
+test_input = list(ln.strip() for ln in test_input_raw.splitlines())
+input = list((ln.strip() for ln in open(f"./inputs/day{day}").readlines()))
 
 
 def _max_joltage_old(bank: str, cells: int):  # type: ignore

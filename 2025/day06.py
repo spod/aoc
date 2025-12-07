@@ -4,7 +4,7 @@ import os.path
 from collections import defaultdict
 from functools import reduce
 
-from grid import *
+from grid import Grid, Point, build_grid, sub_grid
 
 day = os.path.basename(__file__).split(".")[0][-2:]
 print(f"Day {day}")

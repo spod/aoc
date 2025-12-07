@@ -7,8 +7,8 @@ print(f"Day {day}")
 test_input_raw = """
 """
 
-test_input = list(l.strip() for l in test_input_raw.splitlines())
-input = list((l.strip() for l in open(f"./inputs/day{day}").readlines()))
+test_input = list(ln.strip() for ln in test_input_raw.splitlines())
+input = list((ln.strip() for ln in open(f"./inputs/day{day}").readlines()))
 
 
 def part1(input: list[str]):
