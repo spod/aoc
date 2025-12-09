@@ -11,11 +11,15 @@ class Point:
         return Point(self.r + other.r, self.c + other.c)  # type: ignore
 
     def __str__(self) -> str:
-        return f"Cell({self.r}, {self.c})"
+        return f"Point({self.r}, {self.c})"
 
     def __repr__(self) -> str:
-        return f"Cell({self.r}, {self.c})"
+        return f"Point({self.r}, {self.c})"
 
+def area(c1: Point, c2: Point) -> float:
+    h = abs(c1.r - c2.r) + 1
+    w = abs(c1.c - c2.c) + 1
+    return h * w
 
 class Grid:
     rows: int
