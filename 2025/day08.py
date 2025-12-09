@@ -32,6 +32,7 @@ test_input_raw = """162,817,812
 test_input = list(ln.strip() for ln in test_input_raw.splitlines())
 input = list((ln.strip() for ln in open(f"./inputs/day{day}").readlines()))
 
+
 class Point:
     x: int
     y: int
@@ -52,12 +53,14 @@ class Point:
     def __repr__(self) -> str:
         return f"Point({self.x}, {self.y}, {self.z})"
 
+
 def distance(p1: Point, p2: Point) -> float:
-    return sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2 + (p1.z - p2.z)**2)
+    return sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2 + (p1.z - p2.z) ** 2)
+
 
 def part1(input: list[str]):
     junction_boxes: list[Point] = []
-    distances: dict[float, tuple[Point,Point]] = {}
+    distances: dict[float, tuple[Point, Point]] = {}
     for ln in input:
         parts = ln.split(",")
         junction_boxes.append(Point(int(parts[0]), int(parts[1]), int(parts[2])))
@@ -71,7 +74,9 @@ def part1(input: list[str]):
 
 
 print("test part 1:", part1(test_input))
-import sys;sys.exit()
+import sys
+
+sys.exit()
 print("part 1:", part1(input))
 
 

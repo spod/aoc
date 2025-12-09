@@ -16,10 +16,75 @@ class Point:
     def __repr__(self) -> str:
         return f"Point({self.r}, {self.c})"
 
+
 def area(c1: Point, c2: Point) -> float:
     h = abs(c1.r - c2.r) + 1
     w = abs(c1.c - c2.c) + 1
     return h * w
+
+
+def rectangle(c1: Point, c2: Point) -> tuple[Point, Point, Point, Point]:
+    c3 = Point(c1.r, c2.c)
+    c4 = Point(c2.r, c1.c)
+    return (c1, c2, c3, c4)
+
+
+class Line:
+    p1: Point
+    p2: Point
+
+    def __init__(self, p1: Point, p2: Point):
+        self.p1 = p1
+        self.p2 = p2
+
+    def __str__(self) -> str:
+        return f"Line({self.p1}, {self.p2})"
+
+    def __repr__(self) -> str:
+        return f"Line({self.p1}, {self.p2})"
+
+    def on_line(self, p3: Point) -> bool:
+        return (self.p2.r - self.p1.r) * (p3.c - self.p1.c) == (p3.r - self.p1.r) * (
+            self.p2.c - self.p1.c
+        )
+
+    def is_on(self, p3: Point) -> bool:
+        result = False
+        if self.p1.r != self.p2.r:
+            result = self.on_line(p3) and within(self.p1.r, p3.r, self.p2.r)
+        result = self.on_line(p3) and within(self.p1.c, p3.c, self.p2.c)
+        # if result:
+        #     print(f"{self}.is_on({p3}) - {result}")
+        return result
+
+
+def within(x: int, y: int, z: int) -> bool:
+    # return true if y is between x and z
+    return x <= y <= z or z <= y <= x
+
+
+class Rectangle:
+    c1: Point
+    c2: Point
+
+    def __init__(self, c1: Point, c2: Point):
+        self.c1 = c1
+        self.c2 = c2
+
+    def __str__(self) -> str:
+        return f"Rectangle({self.c1}, {self.c2})"
+
+    def __repr__(self) -> str:
+        return f"Rectangle({self.c1}, {self.c2})"
+
+    def within(self, p3: Point) -> bool:
+        result = within(self.c1.r, p3.r, self.c2.r) and within(
+            self.c1.c, p3.c, self.c2.c
+        )
+        # if result:
+        #     print(f"{self}.within({p3}) - {result}")
+        return result
+
 
 class Grid:
     rows: int
