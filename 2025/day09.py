@@ -130,16 +130,16 @@ def part2(input: list[str]):
     # print(red_green_zone_lines)
     # print(red_green_zone_rects)
     print(
-        f"valid((7,3), (11,1), lines) ok: {valid(Point(7,3), Point(11,1), red_green_zone_lines, red_green_zone_rects)}"
+        f"valid((7,3), (11,1), lines) ok: {valid(Point(7, 3), Point(11, 1), red_green_zone_lines, red_green_zone_rects)}"
     )
     print(
-        f"valid((9,7), (9,5), lines) ok: {valid(Point(7,3), Point(11,1), red_green_zone_lines, red_green_zone_rects)}"
+        f"valid((9,7), (9,5), lines) ok: {valid(Point(7, 3), Point(11, 1), red_green_zone_lines, red_green_zone_rects)}"
     )
     print(
-        f"valid((9,5), (2,3), lines) ok: {valid(Point(9,5), Point(2,3), red_green_zone_lines, red_green_zone_rects)}"
+        f"valid((9,5), (2,3), lines) ok: {valid(Point(9, 5), Point(2, 3), red_green_zone_lines, red_green_zone_rects)}"
     )
     print(
-        f"valid((11,1), (2,5), lines) invalid: {valid(Point(11,1), Point(2,5), red_green_zone_lines, red_green_zone_rects)}"
+        f"valid((11,1), (2,5), lines) invalid: {valid(Point(11, 1), Point(2, 5), red_green_zone_lines, red_green_zone_rects)}"
     )
 
     return None

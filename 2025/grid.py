@@ -149,7 +149,6 @@ def valid(p: Point, g: Grid) -> bool:
 
 
 def build_grid(input: list[str], fill: str = "") -> Grid:
-
     def char_or_fill(char: str, fill: str) -> str:
         if fill != "" and char == " ":
             return fill
